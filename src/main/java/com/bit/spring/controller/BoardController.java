@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/board/")
@@ -31,48 +30,71 @@ public class BoardController {
             redirectAttributes.addFlashAttribute("message", "로그인 해주세요.");
             return "redirect:/";
         }
-        System.out.println(boardService.selectALL(pageNo));
+
+        int start = 0;
+        int end = 0;
+
+        int lastPage = boardService.selectLastPage();
+        if (lastPage < 5) {
+            start = 1;
+            end = lastPage;
+        } else if (pageNo < 3) {
+            start = 1;
+            end = 5;
+        } else if (pageNo > lastPage - 3) {
+            start = lastPage - 4;
+            end = lastPage;
+        } else {
+            start = pageNo - 2;
+            end = pageNo + 2;
+        }
+
         model.addAttribute("list", boardService.selectALL(pageNo));
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPage", start);
+        model.addAttribute("endPage", end);
+        model.addAttribute("current", pageNo);
+        model.addAttribute("pagingAddr", "/board/showAll");
 
         return "/board/showAll";
     }
 
-//    @GetMapping("showOne/{id}")
-//    public String showOne(HttpSession session, RedirectAttributes redirectAttributes, Model model, @PathVariable int id) {
-//        if (session.getAttribute("logIn") == null) {
-//            redirectAttributes.addFlashAttribute("message", "다시 로그인 해주세요.");
-//            return "redirect:/";
-//        }
-//
-//        BoardDTO b = boardService.selectOne(id);
-//        if (b == null) {
-//            redirectAttributes.addFlashAttribute("message", "존재하지 않는 글 번호입니다.");
-//            return "redirect:/board/showAll/1";
-//        }
-//
-//        model.addAttribute("result", b);
-//        int logInId = ((UserDTO) session.getAttribute("logIn")).getId();
-//        model.addAttribute("logInId", logInId);
-//        return "/board/showOne";
-//    }
-//
-//    @GetMapping("update/{id}")
-//    public String showUpdate(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
-//        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
-//        if (logIn == null) {
-//            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
-//            return "redirect:/";
-//        }
-//        BoardDTO b = boardService.selectOne(id);
-//        if (b == null || b.getWriterId() != logIn.getId()) {
-//            redirectAttributes.addFlashAttribute("message", "유효하지 않은 접근입니다.");
-//            return "redirect:/board/showAll/1";
-//        }
-//
-//        model.addAttribute("result", b);
-//        return "/board/update";
-//    }
-//
+    @GetMapping("showOne/{id}")
+    public String showOne(HttpSession session, RedirectAttributes redirectAttributes, Model model, @PathVariable int id) {
+        if (session.getAttribute("logIn") == null) {
+            redirectAttributes.addFlashAttribute("message", "다시 로그인 해주세요.");
+            return "redirect:/";
+        }
+
+        BoardDTO b = boardService.selectOne(id);
+        if (b == null) {
+            redirectAttributes.addFlashAttribute("message", "존재하지 않는 글 번호입니다.");
+            return "redirect:/board/showAll/1";
+        }
+
+        model.addAttribute("result", b);
+        int logInId = ((UserDTO) session.getAttribute("logIn")).getId();
+        model.addAttribute("logInId", logInId);
+        return "/board/showOne";
+    }
+
+    @GetMapping("update/{id}")
+    public String showUpdate(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+        if (logIn == null) {
+            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
+            return "redirect:/";
+        }
+        BoardDTO b = boardService.selectOne(id);
+        if (b == null || b.getWriterId() != logIn.getId()) {
+            redirectAttributes.addFlashAttribute("message", "유효하지 않은 접근입니다.");
+            return "redirect:/board/showAll/1";
+        }
+
+        model.addAttribute("result", b);
+        return "/board/update";
+    }
+
 //    @PostMapping("update")
 //    public String updateBoard(HttpSession session, BoardDTO boardDTO) {
 //        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
@@ -109,4 +131,29 @@ public class BoardController {
 //
 //        return "redirect:/board/showAll/1";
 //    }
+
+    @GetMapping("write")
+    public String showWrite() {
+
+
+        return "/board/write";
+    }
+
+    @PostMapping("write")
+    public String write(HttpSession session, BoardDTO boardDTO) {
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+        boardDTO.setWriterId(logIn.getId());
+        boardService.insert(boardDTO);
+
+        return "redirect:/board/showOne/" + boardDTO.getId();
+    }
+
+    @GetMapping("search/{pageNo}")
+    public String search(@PathVariable int pageNo, String keyword, Model model) {
+        model.addAttribute("list", boardService.selectByKeyword(keyword));
+        model.addAttribute("pagingAddr","/search/"+keyword);
+        model.addAttribute("keyword", keyword);
+
+        return "/board/showAll";
+    }
 }

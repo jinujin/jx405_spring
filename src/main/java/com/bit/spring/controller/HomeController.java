@@ -14,7 +14,6 @@ public class HomeController {
 //    }
     @RequestMapping("/")
     public String showIndex(Model model) {
-        System.out.println("라라라라라");
         return "index";
     }
 //

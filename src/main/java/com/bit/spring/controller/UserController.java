@@ -33,32 +33,29 @@ public class UserController {
             model.addAttribute("id", result.getId());
             return "redirect:/board/showAll/1";
         } else {
-            model.addAttribute("message", "로그인 정보를 다시 확인해주세요.");
+            model.addAttribute("message", "Please check your login information again");
             return "index";
         }
     }
 
+    @GetMapping("register")
+    public String showRegister() {
+        return "user/register";
+    }
     // 회원가입
-//    @PostMapping("register")
-//    public String register(RedirectAttributes redirectAttributes, UserDTO attempt) {
-//        boolean result = userService.insert(attempt);
-//
-//        if (result) {
-//            return "index";
-//        } else {
-//            //중복
-//            redirectAttributes.addFlashAttribute("message", "아이디가 중복 되었습니다.");
-//            return "redirect:/user/register";
-//        }
-//    }
-//
-//    @GetMapping("register")
-//    public String showRegister(Model model) {
-//        System.out.println(model.addAttribute("message"));
-//
-//        return "/user/register";
-//    }
-//
+
+    @PostMapping("register")
+    public String register(Model model, UserDTO attempt) {
+        boolean result = userService.insert(attempt);
+        if (result) {
+            return "redirect:/";
+        } else {
+            //중복
+            model.addAttribute("message","You cannot register as a member with a duplicate IDs.");
+            return "user/register";
+        }
+    }
+
 //    // 회원정보수정
 //
 //    @GetMapping("update/{id}")
