@@ -39,63 +39,63 @@ public class UserController {
     }
 
     // 회원가입
-    @PostMapping("register")
-    public String register(RedirectAttributes redirectAttributes, UserDTO attempt) {
-        boolean result = userService.insert(attempt);
-
-        if (result) {
-            return "index";
-        } else {
-            //중복
-            redirectAttributes.addFlashAttribute("message", "아이디가 중복 되었습니다.");
-            return "redirect:/user/register";
-        }
-    }
-
-    @GetMapping("register")
-    public String showRegister(Model model) {
-        System.out.println(model.addAttribute("message"));
-
-        return "/user/register";
-    }
-
-    // 회원정보수정
-
-    @GetMapping("update/{id}")
-    public String showUpdateUser(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
-        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
-        if (logIn == null) {
-            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
-            return "redirect:/";
-        }
-        UserDTO userDTO = userService.selectOne(id);
-        if(userDTO == null){
-            redirectAttributes.addFlashAttribute("message", "다시 확인해주세요.");
-            return "redirect:/";
-        }
-
-        model.addAttribute("result", userDTO);
-        return "/user/update";
-    }
-
-    @PostMapping("update")
-    public String updateUser(HttpSession session,RedirectAttributes redirectAttributes, UserDTO userDTO) {
-        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
-        if (logIn == null) {
-            return "redirect:/";
-        }
-
-        UserDTO origin = userService.selectOne(userDTO.getId());
-
-        if (origin == null) {
-            return "redirect:/";
-        }
-        origin.setNickname(userDTO.getNickname());
-        origin.setPassword(userDTO.getPassword());
-
-        userService.update(origin);
-
-        return "redirect:/board/showAll/1";
-
-    }
+//    @PostMapping("register")
+//    public String register(RedirectAttributes redirectAttributes, UserDTO attempt) {
+//        boolean result = userService.insert(attempt);
+//
+//        if (result) {
+//            return "index";
+//        } else {
+//            //중복
+//            redirectAttributes.addFlashAttribute("message", "아이디가 중복 되었습니다.");
+//            return "redirect:/user/register";
+//        }
+//    }
+//
+//    @GetMapping("register")
+//    public String showRegister(Model model) {
+//        System.out.println(model.addAttribute("message"));
+//
+//        return "/user/register";
+//    }
+//
+//    // 회원정보수정
+//
+//    @GetMapping("update/{id}")
+//    public String showUpdateUser(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
+//        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+//        if (logIn == null) {
+//            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
+//            return "redirect:/";
+//        }
+//        UserDTO userDTO = userService.selectOne(id);
+//        if(userDTO == null){
+//            redirectAttributes.addFlashAttribute("message", "다시 확인해주세요.");
+//            return "redirect:/";
+//        }
+//
+//        model.addAttribute("result", userDTO);
+//        return "/user/update";
+//    }
+//
+//    @PostMapping("update")
+//    public String updateUser(HttpSession session,RedirectAttributes redirectAttributes, UserDTO userDTO) {
+//        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+//        if (logIn == null) {
+//            return "redirect:/";
+//        }
+//
+//        UserDTO origin = userService.selectOne(userDTO.getId());
+//
+//        if (origin == null) {
+//            return "redirect:/";
+//        }
+//        origin.setNickname(userDTO.getNickname());
+//        origin.setPassword(userDTO.getPassword());
+//
+//        userService.update(origin);
+//
+//        return "redirect:/board/showAll/1";
+//
+//    }
 }
