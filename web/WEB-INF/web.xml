@@ -4,17 +4,20 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <context-param>
-<!--        spring 파일 위치 확인-->
+        <!--        spring 파일 위치 확인-->
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
+        <param-value>
+            /WEB-INF/spring/applicationContext.xml
+            /WEB-INF/spring/securityContext.xml
+        </param-value>
     </context-param>
 
-<!--    web 요청을 누구한테 할지 처리를 할지 지정-->
+    <!--    web 요청을 누구한테 할지 처리를 할지 지정-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-<!--    encodingFilter 설정-->
+    <!--    encodingFilter 설정-->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -27,6 +30,14 @@
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -35,11 +46,11 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/spring/dispatcherServlet.xml</param-value>
         </init-param>
-<!--        여러개의 서블릿을 사용하는 경우 서블릿 우선순위 정해주는 작업-->
+        <!--        여러개의 서블릿을 사용하는 경우 서블릿 우선순위 정해주는 작업-->
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-<!--    서블릿을 어디 url 맵핑할지 지정-->
+    <!--    서블릿을 어디 url 맵핑할지 지정-->
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>

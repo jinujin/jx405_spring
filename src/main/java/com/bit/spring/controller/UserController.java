@@ -56,24 +56,24 @@ public class UserController {
         }
     }
 
-//    // 회원정보수정
-//
-//    @GetMapping("update/{id}")
-//    public String showUpdateUser(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
-//        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
-//        if (logIn == null) {
-//            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
-//            return "redirect:/";
-//        }
-//        UserDTO userDTO = userService.selectOne(id);
-//        if(userDTO == null){
-//            redirectAttributes.addFlashAttribute("message", "다시 확인해주세요.");
-//            return "redirect:/";
-//        }
-//
-//        model.addAttribute("result", userDTO);
-//        return "/user/update";
-//    }
+    // 회원정보수정
+
+    @GetMapping("update/{id}")
+    public String showUpdateUser(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+        if (logIn == null) {
+            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
+            return "redirect:/";
+        }
+        UserDTO userDTO = userService.selectOne(id);
+        if(userDTO == null){
+            redirectAttributes.addFlashAttribute("message", "다시 확인해주세요.");
+            return "redirect:/";
+        }
+
+        model.addAttribute("result", userDTO);
+        return "/user/update";
+    }
 //
 //    @PostMapping("update")
 //    public String updateUser(HttpSession session,RedirectAttributes redirectAttributes, UserDTO userDTO) {

@@ -46,7 +46,7 @@
                         </div>
                     </li>
                 </ul>
-                <form class="d-flex" action="/board/search/1?keyword=${keyword}" method="get">
+                <form class="d-flex" action="/board/search/1" method="get">
                     <input class="form-control me-sm-2" type="search" placeholder="검색" name="keyword">
                     <button class="btn btn-secondary my-2 my-sm-0 col-4" type="submit">검색</button>
                 </form>
@@ -54,7 +54,7 @@
         </div>
     </nav>
     <div class="row h-100">
-        <div class="col-10">
+        <div class="col">
             <div class="row">
                 <div class="col">
                     <div class="mb-5">
@@ -86,24 +86,24 @@
                             <td colspan="5">
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item">
-                                        <a class="page-link" href="${pagingAddr}/1">&laquo</a>
+                                        <a class="page-link" href="${pagingAddr}/1?keyword=${keyword}">&laquo</a>
                                     </li>
-                                    <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                                    <c:forEach var="i" begin="${paging.start}" end="${paging.end}">
                                         <c:choose>
                                             <c:when test="${i eq current}">
                                                 <li class="page-item active disabled">
-                                                    <a class="page-link" href="${pagingAddr}/${i}">${i}</a>
+                                                    <a class="page-link" href="${pagingAddr}/${i}?keyword=${keyword}">${i}</a>
                                                 </li>
                                             </c:when>
                                             <c:otherwise>
                                                 <li class="page-item">
-                                                    <a class="page-link" href="${pagingAddr}/${i}">${i}</a>
+                                                    <a class="page-link" href="${pagingAddr}/${i}?keyword=${keyword}">${i}</a>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
                                     <li class="page-item">
-                                        <a class="page-link" href="${pagingAddr}/${lastPage}">&raquo</a>
+                                        <a class="page-link" href="${pagingAddr}/${paging.totalPage}?keyword=${keyword}">&raquo</a>
                                     </li>
                                 </ul>
                             </td>

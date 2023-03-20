@@ -13,6 +13,10 @@
         SELECT * FROM user
         WHERE username = #{username}
     </select>
+    <select id="selectOne" resultType="userDTO" parameterType="int">
+        SELECT * FROM user
+        WHERE user.id = #{id}
+    </select>
     <insert id="register" parameterType="userDTO">
         INSERT INTO user(username, password,nickname)
         VALUES (#{username}, #{password}, #{nickname})
@@ -21,6 +25,14 @@
         UPDATE user SET
         password = #{password},
         nickname = #{nickname}
+        WHERE id = #{id}
     </update>
+    <delete id="delete" parameterType="int">
+        DELETE FROM user
+        WHERE id=#{id}
+    </delete>
+    <select id="selectAll" resultType="userDTO">
+        SELECT * FROM user
+    </select>
 </mapper>
 
