@@ -24,6 +24,10 @@ public class UserController {
     }
 
     // 로그인
+    @GetMapping("login")
+    public String showLogin(){
+        return "user/login";
+    }
     @PostMapping("auth")
     public String auth(HttpSession session, Model model, UserDTO attempt) {
         UserDTO result = userService.auth(attempt);
@@ -34,15 +38,24 @@ public class UserController {
             return "redirect:/board/showAll/1";
         } else {
             model.addAttribute("message", "Please check your login information again");
-            return "index";
+            return "main";
         }
     }
 
-    @GetMapping("register")
-    public String showRegister() {
-        return "user/register";
-    }
     // 회원가입
+    @GetMapping("choice_register")
+    public String showChoice_Register() {
+        return "user/choice_register";
+    }
+
+    @GetMapping("registerForBuy")
+    public String showRegisterForBuy() {
+        return "user/registerForBuy";
+    }
+    @GetMapping("registerForSell")
+    public String showRegisterForSell() {
+        return "user/registerForSell";
+    }
 
     @PostMapping("register")
     public String register(Model model, UserDTO attempt) {
@@ -52,7 +65,7 @@ public class UserController {
         } else {
             //중복
             model.addAttribute("message","You cannot register as a member with a duplicate IDs.");
-            return "user/register";
+            return "user/choice_register";
         }
     }
 

@@ -18,8 +18,8 @@
         WHERE user.id = #{id}
     </select>
     <insert id="register" parameterType="userDTO">
-        INSERT INTO user(username, password,nickname)
-        VALUES (#{username}, #{password}, #{nickname})
+        INSERT INTO user(username, password,name,postcode,address,phone,email,role)
+        VALUES (#{username}, #{password}, #{name}, #{postcode}, #{address}, #{phone}, #{email}, #{role})
     </insert>
     <update id="update" parameterType="userDTO">
         UPDATE user SET

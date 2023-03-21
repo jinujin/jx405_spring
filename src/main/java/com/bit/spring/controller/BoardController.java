@@ -29,8 +29,8 @@ public class BoardController {
 
     @GetMapping("showAll/{pageNo}")
     public String showAll(Authentication authentication, Model model, @PathVariable int pageNo) {
-        System.out.println(authentication.getName());
-        System.out.println(authentication.getAuthorities());
+//        System.out.println(authentication.getName());
+//        System.out.println(authentication.getAuthorities());
 
         model.addAttribute("list", boardService.selectAll(pageNo));
         model.addAttribute("paging", setPages(pageNo, boardService.selectLastPage()));

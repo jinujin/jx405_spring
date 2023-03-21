@@ -21,6 +21,6 @@ public class HomeController {
     public String showIndex(Model model) {
 //        userService.encrypt();
 
-        return "index";
+        return "main";
     }
 }
