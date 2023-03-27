@@ -2,10 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-            crossorigin="anonymous"></script>
+    <link href="/resources/images/CC_mark.JPG" rel="shortcut icon" type="image/x-icon">
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
     <script>
         function execDaumPostcode() {
@@ -47,7 +44,7 @@
             }).open();
         }
     </script>
-    <title>회원 가입</title>
+    <title>회원 가입 - CC</title>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp" %>
@@ -64,7 +61,7 @@
                 </div>
                 <form method="post" action="/user/register">
                     <h2>✔ 사업자 / 일반 구매 회원가입</h2>
-                    <input type="hidden" name="role" value="BUYER">
+                    <input type="hidden" name="role" value="ROLE_BUYER">
                     <div class="row">
                         <div class="col">
                             <label for="input-username">ID</label>
@@ -80,7 +77,7 @@
                     <div class="row">
                         <div class="col">
                             <label for="input-name">NAME</label>
-                            <input type="text" name="name" class="form-control mb-2" id="input-name"/>
+                            <input type="text" name="nickname" class="form-control mb-2" id="input-name"/>
                         </div>
                     </div>
                     <div class="row">
@@ -115,6 +112,5 @@
         </div>
     </div>
 </div>
-<%@include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

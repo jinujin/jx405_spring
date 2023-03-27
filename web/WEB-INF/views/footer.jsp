@@ -3,8 +3,16 @@
 <head>
     <title>Title</title>
     <style>
+        .wrapper {
+            height: auto;
+            min-height: 100%;
+        }
         footer{
-            margin-top: 45px;
+            position: relative;
+            transform: translateY(-100%);
+            padding-top: 16px;
+            margin-top: 24px;
+            font-family: 'Gowun Dodum', sans-serif;
         }
     </style>
 </head>

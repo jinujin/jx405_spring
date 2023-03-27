@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.GoodsMapper">
+    <resultMap id="goods" type="goodsDTO">
+        <result property="sellerName" column="nickname"/>
+        <result property="brandName" column="goodsName"/>
+        <result property="kind" column="kind"/>
+    </resultMap>
+    <select id="selectOne" resultType="goodsDTO" parameterType="int">
+        SELECT
+            goods.id, goods.brand_id,
+            detail, price, amount,
+            brand.name as brandName,
+            goods.name as name,
+            user.nickname as sellerName,
+            image
+        FROM goods
+        INNER JOIN user
+        ON goods.user_id = user.id
+        INNER JOIN brand
+        ON goods.brand_id = brand.id
+        WHERE goods.id = #{id}
+    </select>
+    <select id="selectAll" resultType="goodsDTO">
+        SELECT
+            goods.id,
+            goods.brand_id as brandId,
+            detail, price, amount,
+            brand.name as brandName,
+            goods.name as name,
+            user.nickname as sellerName,
+            image
+        FROM goods
+        INNER JOIN user
+        ON goods.user_id = user.id
+        INNER JOIN brand
+        ON goods.brand_id = brand.id
+        ORDER BY goods.id DESC
+    </select>
+    <select id="selectAllByCategory" resultType="goodsDTO" parameterType="int">
+        SELECT
+            goods.id,
+            goods.brand_id as brandId,
+            detail, price, amount,
+            brand.name as brandName,
+            goods.name as name,
+            user.nickname as sellerName,
+            image,
+            category.kind as kind
+        FROM goods
+        INNER JOIN user
+        ON goods.user_id = user.id
+        INNER JOIN brand
+        ON goods.brand_id = brand.id
+        INNER JOIN category
+        ON goods.category_id = category.id
+        WHERE goods.category_id = #{category_id}
+    </select>
+    <select id="selectByKeyword" parameterType="string" resultType="goodsDTO">
+        SELECT
+            goods.id,
+            goods.brand_id as brandId,
+            detail, price, amount,
+            brand.name as brandName,
+            goods.name as name,
+            user.nickname as sellerName,
+            image
+        FROM goods
+        INNER JOIN user
+        ON goods.user_id = user.id
+        INNER JOIN brand
+        ON goods.brand_id = brand.id
+        WHERE goods.name LIKE concat('%', #{keyword},'%')
+        OR
+        detail LIKE concat('%', #{keyword},'%')
+        ORDER BY goods.id DESC
+    </select>
+<!--    brandOne에 출력할 해당 브랜드에 goodsList-->
+    <select id="goodsInBrand" resultType="goodsDTO" parameterType="int">
+        SELECT * FROM goods
+        WHERE brand_id = #{brand_id};
+    </select>
+    <insert id="insert" parameterType="goodsDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO goods(name,user_id, brand_id, detail, price, amount, category_id, image)
+        VALUES(#{name},#{userId}, #{brandId}, #{detail}, #{price}, #{amount}, #{categoryId}, #{image})
+    </insert>
+    <update id="update" parameterType="goodsDTO">
+        UPDATE goods
+        SET user_id=#{userId},
+        brand_id = #{brandId},
+        category_id = #{categoryId},
+        name = #{name},
+        detail = #{detail},
+        price = #{price},
+        amount = #{amount},
+        image = #{image}
+    </update>
+    <delete id="delete" parameterType="int">
+        DELETE FROM goods
+        WHERE id = #{id}
+    </delete>
+</mapper>

@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Service
-public class UserAuthFailHandler implements AuthenticationFailureHandler {
+public class userAuthFailHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         e.printStackTrace();
-        httpServletResponse.sendRedirect("/");
+        httpServletResponse.sendRedirect("/user/choice_register");
 
     }
 }

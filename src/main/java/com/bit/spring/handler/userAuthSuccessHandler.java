@@ -23,7 +23,7 @@ public class userAuthSuccessHandler implements AuthenticationSuccessHandler {
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("logIn", userDTO);
 
-        httpServletResponse.sendRedirect("/board/showAll/1");
+        httpServletResponse.sendRedirect("/");
 
     }
 }

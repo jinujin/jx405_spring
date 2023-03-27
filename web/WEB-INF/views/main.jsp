@@ -11,11 +11,12 @@
 <div class="container">
     <div class="row h-100 align-items-center">
         <div class="col-10">
-            HELLO
+            HELLO, <br>
+            WELCOME TO PREMIUM ONLINE OUTLET <br>
+            THIS IS CHARLIE COMMERCE
         </div>
     </div>
 </div>
-<%@include file="/WEB-INF/views/footer.jsp" %>
 
 </body>
 </html>

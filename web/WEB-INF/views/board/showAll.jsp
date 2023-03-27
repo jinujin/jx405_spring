@@ -1,120 +1,87 @@
+<%@ page import="com.bit.spring.model.UserDTO" %>
+<%@ page import="org.springframework.security.core.userdetails.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+%>
 <html>
 <head>
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-            crossorigin="anonymous"></script>
-    <title>게시판</title>
+    <link href="/resources/images/CC_mark.JPG" rel="shortcut icon" type="image/x-icon">
+
+    <title>고객센터 - CC</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nunito:wght@700&display=swap');
+
+        .accordion-body {
+            background-color: rgb(247, 247, 247);
+        }
+        .group{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 50px;
+        }
+        .group-list{
+            text-decoration: none;
+            font-family: 'Gowun Dodum', sans-serif;
+            font-size: 20px;
+            color: #111111;
+        }
+        .group-list:hover{
+            font-weight: bolder;
+            color: darkgreen;
+        }
+    </style>
 </head>
 <body>
+<%@include file="/WEB-INF/views/header.jsp" %>
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/board/showAll/1">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
-                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/board/showAll/1">Home
-                            <span class="visually-hidden">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                           aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
-                    </li>
-                </ul>
-                <form class="d-flex" action="/board/search/1" method="get">
-                    <input class="form-control me-sm-2" type="search" placeholder="검색" name="keyword">
-                    <button class="btn btn-secondary my-2 my-sm-0 col-4" type="submit">검색</button>
-                </form>
-            </div>
-        </div>
-    </nav>
     <div class="row h-100">
         <div class="col">
-            <div class="row">
-                <div class="col">
-                    <div class="mb-5">
-                        <a class="btn btn-success" href="/user/update/${id}">회원수정</a>
-                        <a class="btn btn-danger" href="/user/delete/">회원탈퇴</a>
-                    </div>
-                    <table class="table table-hover table-striped">
-                        <thead>
-                        <tr>
-                            <th>NUMBER</th>
-                            <th>TITLE</th>
-                            <th>WRITER</th>
-                            <th>ENTRY DATE</th>
-                            <th>MODIFY DATE</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${list}" var="item">
-                            <tr onclick="location.href='/board/showOne/${item.id}'">
-                                <td>${item.id}</td>
-                                <td>${item.title}</td>
-                                <td>${item.writerNickname}</td>
-                                <td><fmt:formatDate value="${item.entryDate}" pattern="yyyy년 MM월 dd일 HH시 mm분 ss초"/></td>
-                                <td><fmt:formatDate value="${item.modifyDate}"
-                                                    pattern="yyyy년 MM월 dd일 HH시 mm분 ss초"/></td>
-                            </tr>
-                        </c:forEach>
-                        <tr>
-                            <td colspan="5">
-                                <ul class="pagination justify-content-center">
-                                    <li class="page-item">
-                                        <a class="page-link" href="${pagingAddr}/1?keyword=${keyword}">&laquo</a>
-                                    </li>
-                                    <c:forEach var="i" begin="${paging.start}" end="${paging.end}">
-                                        <c:choose>
-                                            <c:when test="${i eq current}">
-                                                <li class="page-item active disabled">
-                                                    <a class="page-link" href="${pagingAddr}/${i}?keyword=${keyword}">${i}</a>
-                                                </li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="${pagingAddr}/${i}?keyword=${keyword}">${i}</a>
-                                                </li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                    <li class="page-item">
-                                        <a class="page-link" href="${pagingAddr}/${paging.totalPage}?keyword=${keyword}">&raquo</a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <a class="btn btn-secondary" href="/board/write">글쓰기</a>
+            <form class="col-lg-auto mb-lg-2 me-lg-3 form" action="/products/search" method="get" role="search">
+                <div class="searchbox"><input type="search" class="form-control form-control-dark" placeholder="게시판 검색"
+                                              name="keyword" aria-label="Search">
+                    <button type="submit" class="btn btn-success gap">🔍</button>
                 </div>
+            </form>
+            <div class="mb-2 group">
+                <a class="group-list" href="/board/showAll">전체</a>
+                <a class="group-list" href="/board/showAllByKind/1">공지사항</a>
+                <a class="group-list" href="/board/showAllByKind/2">이벤트</a>
+                <a class="group-list" href="/board/showAllByKind/3">문의 내역</a>
+            </div>
+
+            <div class="accordion mb-5">
+                <c:forEach items="${list}" var="item" varStatus="i">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse${i.count}"
+                                    aria-expanded="false" aria-controls="collapseOne">
+                                    ${item.title}
+                                <br/><fmt:formatDate value="${item.entryDate}"
+                                                     pattern="yyyy.MM.dd HH:mm"/>
+                            </button>
+                        </h2>
+                        <div id="collapse${i.count}" class="accordion-collapse collapse"
+                             aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                            <div class="accordion-body">
+                                    ${item.content}
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+                <c:set var="logIn" value="<%=logIn%>"/>
+                <c:if test="${logIn.role.equals('ROLE_ADMIN')}">
+                    <a class="btn btn-secondary" href="/board/write">글쓰기</a>
+                </c:if>
             </div>
         </div>
     </div>
-</div>
+
 </body>
 </html>

@@ -53,8 +53,11 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         UserDTO user = session.selectOne(NAMESPACE + ".validate", s);
+//        System.out.println(user);
         if (user != null) {
-            return new UserCustomDetails(user);
+            UserCustomDetails details = new UserCustomDetails(user);
+//            System.out.println(details);
+            return details;
         }
         return null;
     }

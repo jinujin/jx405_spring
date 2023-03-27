@@ -12,17 +12,38 @@
         <!--      permitAll() : pattern에 있는 url에 누구든 접속 가능하게  -->
         <security:intercept-url pattern="/resources/**" access="permitAll()"/>
         <security:intercept-url pattern="/" access="permitAll()"/>
+        <security:intercept-url pattern="/user/auth" access="permitAll()"/>
         <security:intercept-url pattern="/user/*" access="permitAll()"/>
+        <security:intercept-url pattern="/products/*" access="permitAll()"/>
+        <security:intercept-url pattern="/encrypt" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/brand/*" access="permitAll()"/>
         <!--      isAuthenticated() : 그 외에는 로그인하고 접근 가능하게  -->
-        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+        <!--        순서 중요-->
+        <security:intercept-url pattern="/user/logOut" access="isAuthenticated()"/>
+        <!--        <security:intercept-url pattern="/**" access="isAuthenticated()"/>-->
         <security:form-login
                 username-parameter="username"
                 password-parameter="password"
                 login-processing-url="/user/auth"
-                default-target-url="/board/showAll/1"
+                default-target-url="/"
                 authentication-failure-handler-ref="userAuthFailHandler"
                 authentication-success-handler-ref="userAuthSuccessHandler"
-                login-page="/"
+                login-page="/user/login"
+        />
+        <!--        success-handler-ref="userLogOutHandler" 아래 추가 선택사항-->
+        <security:logout
+                logout-url="/user/logout"
+                logout-success-url="/"
+                invalidate-session="true"
+        />
+        <!--      token-validity-seconds  로그인이 얼마나 유지될지-->
+        <!--        DB table `persistent_logins`에 기록됨-->
+        <security:remember-me
+                token-validity-seconds="60000"
+                key="sampleKey"
+                user-service-ref="userService"
+                authentication-success-handler-ref="userAuthSuccessHandler"
+                data-source-ref="datasource"
         />
     </security:http>
     <security:authentication-manager>

@@ -2,17 +2,26 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.boardMapper">
+<mapper namespace="mapper.BoardMapper">
     <resultMap id="board" type="boardDTO">
         <!--        내부에서 사용가능한 데이터 타입을 만들어줄 수 있음-->
+        <!--        조인 했을 때 다른 table에서 특정 colum을 가져와 쓰고자 할때 -->
         <result property="writerNickname" column="nickname"/>
     </resultMap>
-    <select id="selectAll" resultMap="board" parameterType="hashmap">
+    <select id="selectAll" resultMap="board">
         SELECT * FROM board
         INNER JOIN user
-        ON board.writerId = user.id
+        ON board.writer_id = user.id
+        WHERE classify = 1 OR classify = 2
         ORDER BY board.id DESC
-        LIMIT ${start}, ${size}
+        <!-- ${} : 타입 변환 없이 넘어옴 / #{} : String으로 타입 변환하여 넘어옴-->
+    </select>
+    <select id="selectAllByKind" resultMap="board" parameterType="int">
+        SELECT * FROM board
+        INNER JOIN user
+        ON board.writer_id = user.id
+        WHERE classify = #{classify}
+        ORDER BY board.id DESC
         <!-- ${} : 타입 변환 없이 넘어옴 / #{} : String으로 타입 변환하여 넘어옴-->
     </select>
     <select id="selectOne" resultMap="board" parameterType="int">
@@ -22,25 +31,21 @@
         WHERE board.id = #{id}
     </select>
     <insert id="insert" parameterType="boardDTO" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO board(title, content, writerId, entry_date, modify_date)
-        VALUES(#{title}, #{content}, #{writerId}, NOW(), NOW())
+        INSERT INTO board(title, content, writer_id, entry_date, classify)
+        VALUES(#{title}, #{content}, #{writerId}, NOW(), #{classify})
     </insert>
     <update id="update" parameterType="boardDTO">
         UPDATE board
         SET title=#{title},
         content=#{content},
-        modify_date=NOW()
+        classify=#{classify}
         WHERE id=#{id}
     </update>
     <delete id="delete" parameterType="int">
         DELETE FROM board
         WHERE id=#{id}
     </delete>
-    <select id="count" resultType="int">
-        SELECT COUNT(*)
-        FROM board
-    </select>
-    <select id="selectByKeyword" parameterType="map" resultMap="board">
+    <select id="selectByKeyword" parameterType="string" resultMap="board">
         SELECT * FROM board
         INNER JOIN user
         ON board.writerId = user.id
@@ -48,7 +53,6 @@
         OR
         content LIKE concat('%', #{keyword},'%')
         ORDER BY board.id DESC
-        LIMIT ${start}, ${size}
     </select>
     <select id="countSearchResult" parameterType="string" resultType="int">
         SELECT COUNT(*) FROM board

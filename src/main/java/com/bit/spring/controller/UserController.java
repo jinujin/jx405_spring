@@ -3,6 +3,7 @@ package com.bit.spring.controller;
 import com.bit.spring.model.UserDTO;
 import com.bit.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,8 @@ public class UserController {
 
     @PostMapping("register")
     public String register(Model model, UserDTO attempt) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        attempt.setPassword(passwordEncoder.encode(attempt.getPassword()));
         boolean result = userService.insert(attempt);
         if (result) {
             return "redirect:/";
@@ -85,7 +88,7 @@ public class UserController {
         }
 
         model.addAttribute("result", userDTO);
-        return "/user/update";
+        return "user/update";
     }
 //
 //    @PostMapping("update")

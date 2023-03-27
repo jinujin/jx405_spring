@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.BrandMapper">
+    <resultMap id="brand" type="brandDTO">
+        <result property="sellerName" column="nickname"/>
+    </resultMap>
+    <select id="selectOne" resultMap="brand" parameterType="int">
+        SELECT *
+        FROM brand
+        INNER JOIN user
+        ON brand.user_id = user.id
+        WHERE brand.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="brand">
+        SELECT *
+        FROM brand
+        INNER JOIN user
+        ON brand.user_id = user.id
+        ORDER BY brand.id DESC
+    </select>
+    <insert id="insert" parameterType="brandDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO brand(name,user_id, url, number, info)
+        VALUES(#{name},#{userId}, #{url}, #{number}, #{info})
+    </insert>
+    <update id="update" parameterType="brandDTO">
+        UPDATE brand
+        SET user_id=#{userId},
+        name = #{name},
+        number = #{number},
+        url = #{url},
+        info = #{info}
+    </update>
+    <delete id="delete" parameterType="int">
+        DELETE FROM brand
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

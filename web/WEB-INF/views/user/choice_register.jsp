@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <link href="/resources/images/CC_mark.JPG" rel="shortcut icon" type="image/x-icon">
     <title>회원가입 - CC</title>
     <style>
         .link {
@@ -117,6 +118,5 @@
         </div>
     </div>
 </div>
-<%@include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

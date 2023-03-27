@@ -27,16 +27,25 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @GetMapping("showAll/{pageNo}")
-    public String showAll(Authentication authentication, Model model, @PathVariable int pageNo) {
+    @GetMapping("a")
+    public String showA(){
+        return "/board/a";
+    }
+    @GetMapping("showAll")
+    public String showAll(Authentication authentication, Model model) {
 //        System.out.println(authentication.getName());
 //        System.out.println(authentication.getAuthorities());
 
-        model.addAttribute("list", boardService.selectAll(pageNo));
-        model.addAttribute("paging", setPages(pageNo, boardService.selectLastPage()));
-        model.addAttribute("pagingAddr", "/board/showAll");
+        model.addAttribute("list", boardService.selectAll());
 
         return "/board/showAll";
+    }
+
+    @GetMapping("showAllByKind/{classify}")
+    public String showAllByKind(Model model, @PathVariable int classify) {
+        model.addAttribute("list",boardService.selectAllByKind(classify));
+
+        return "/board/showAllByKind";
     }
 
     @GetMapping("showOne/{id}")
@@ -50,7 +59,7 @@ public class BoardController {
         BoardDTO b = boardService.selectOne(id);
         if (b == null) {
             redirectAttributes.addFlashAttribute("message", "존재하지 않는 글 번호입니다.");
-            return "redirect:/board/showAll/1";
+            return "redirect:/board/showAll";
         }
 
         model.addAttribute("result", b);
@@ -62,14 +71,10 @@ public class BoardController {
     @GetMapping("update/{id}")
     public String showUpdate(HttpSession session, Model model, RedirectAttributes redirectAttributes, @PathVariable int id) {
         UserDTO logIn = (UserDTO) session.getAttribute("logIn");
-//        if (logIn == null) {
-//            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
-//            return "redirect:/";
-//        }
         BoardDTO b = boardService.selectOne(id);
         if (b == null || b.getWriterId() != logIn.getId()) {
             redirectAttributes.addFlashAttribute("message", "유효하지 않은 접근입니다.");
-            return "redirect:/board/showAll/1";
+            return "redirect:/board/showAll";
         }
 
         model.addAttribute("board", b);
@@ -97,47 +102,4 @@ public class BoardController {
 
         return "redirect:/board/showOne/" + boardDTO.getId();
     }
-
-
-    @GetMapping("search/{pageNo}")
-    public String search(@PathVariable int pageNo, String keyword, Model model) {
-        Map<String, Object> map = boardService.selectByKeyword(keyword, pageNo);
-
-        model.addAttribute("list", map.get("list"));
-        model.addAttribute("pagingAddr", "/board/search");
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("paging", setPages(pageNo, boardService.countSearchResult(keyword)));
-
-        return "/board/showAll";
-    }
-
-    private HashMap<String, Integer> setPages(int pageNo, int totalPage) {
-        HashMap<String, Integer> paging = new HashMap();
-
-        int start = 0;
-        int end = 0;
-
-        if (totalPage < 5) {
-            start = 1;
-            end = totalPage;
-        } else if (pageNo < 3) {
-            start = 1;
-            end = 5;
-        } else if (pageNo > totalPage - 3) {
-            start = totalPage - 4;
-            end = totalPage;
-        } else {
-            start = pageNo - 2;
-            end = pageNo + 2;
-        }
-
-        paging.put("start", start);
-        paging.put("end", end);
-        paging.put("totalPage", totalPage);
-        paging.put("current", pageNo);
-
-        return paging;
-    }
-
-
 }

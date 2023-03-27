@@ -11,7 +11,6 @@ public class HomeController {
 
     // 비밀번호 encoding 코드 (feat.UserService encrypt())
     UserService userService;
-//
     @Autowired
     public HomeController(UserService userService) {
         this.userService = userService;
@@ -22,5 +21,10 @@ public class HomeController {
 //        userService.encrypt();
 
         return "main";
+    }
+    @RequestMapping("/encrypt")
+    public String encrypt(){
+        userService.encrypt();
+        return "user/login";
     }
 }

@@ -6,9 +6,13 @@
     <typeAliases>
         <typeAlias type="com.bit.spring.model.UserDTO" alias="userDTO"/>
         <typeAlias type="com.bit.spring.model.BoardDTO" alias="boardDTO"/>
+        <typeAlias type="com.bit.spring.model.GoodsDTO" alias="goodsDTO"/>
+        <typeAlias type="com.bit.spring.model.BrandDTO" alias="brandDTO"/>
     </typeAliases>
     <mappers>
         <mapper resource="config/mybatis/mapper/UserMapper.xml"/>
         <mapper resource="config/mybatis/mapper/BoardMapper.xml"/>
+        <mapper resource="config/mybatis/mapper/GoodsMapper.xml"/>
+        <mapper resource="config/mybatis/mapper/BrandMapper.xml"/>
     </mappers>
 </configuration>
