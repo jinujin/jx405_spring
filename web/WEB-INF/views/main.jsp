@@ -5,11 +5,19 @@
 <head>
     <link href="/resources/images/CC_mark.JPG" rel="shortcut icon" type="image/x-icon">
     <title>CHARLIE COMMERCE</title>
+    <style>
+        .col-10 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp" %>
 <div class="container">
-    <div class="row h-100 align-items-center">
+    <div class="row align-items-center">
         <div class="col-10">
             HELLO, <br>
             WELCOME TO PREMIUM ONLINE OUTLET <br>

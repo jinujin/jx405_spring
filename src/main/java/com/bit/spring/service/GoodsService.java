@@ -5,7 +5,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GoodsService {
@@ -33,6 +35,12 @@ public class GoodsService {
         session.update(NAMESPACE + ".update", attempt);
     }
 
+    public void updateCnt(int amount, int id) {
+        Map<String,Integer> params = new HashMap<>();
+        params.put("amount",amount);
+        params.put("id", id);
+        session.update(NAMESPACE + ".updateCnt", params);
+    }
     public void delete(int id) {
         session.delete(NAMESPACE + ".delete", id);
     }
@@ -42,5 +50,4 @@ public class GoodsService {
     public List<GoodsDTO> selectByKeyword(String keyword){
         return session.selectList(NAMESPACE+".selectByKeyword",keyword);
     }
-
 }

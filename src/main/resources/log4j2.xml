@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <!--어디에 적힐지 지정-->
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT"> <!--SYSTEM_OUT 서비스 창에 뜨는 것들 -->
+            <!--log가 어떻게 표시가 될지 설정-->
+            <PatternLayout pattern="[%c{1}]: %m at %d{yy-MM-dd HH:mm:ss}%n"></PatternLayout>
+        </Console>
+
+        <!-- 사용자가 로그인 할 때 생기는 로그 하나 -->
+        <!-- fileName = 임시 파일 이름 -->
+        <!-- 기존은 windows 파일 시스템이라서 aws에서는 리눅스 구조를 따라가야 하므로 이런식으로 적어야함 => /log/user-account-activity.log -->
+        <RollingFile name="userAuthLog" fileName="C:\\log\user-account-activity.log"
+                     filePattern="c:\\log\user-account-activity-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="[%c{1}]: %m at %d{yy-MM-dd HH:mm:ss}%n"/>
+            <!--파일을 어떤 기준으로 자를지-->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/> <!-- 파일 크기 단위 -->
+                <TimeBasedTriggeringPolicy module="true" interval="1"/> <!-- 시간 단위 -->
+            </Policies>
+            <DefaultRolloverStrategy max="500" fileIndex="min"/> <!-- 파일 갯수 500개 -->
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!-- 레벨 : 심각순으로 => fㅔ이탈 - 에러 - warn - INFO(정보) - - TRACE -->
+        <Logger name="com.bit.spring.controller" level="TRACE" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <!-- 로그인이 성공하면 log를 저장 -->
+        <Logger name="com.bit.spring.handler.UserAuthSuccessHandler" level="INFO" additivity="false">
+            <AppenderRef ref="userAuthLog"/>
+        </Logger>
+        <!-- 실행시킬때 에러가 날 때만 console에 출력 -->
+        <Root level="ERROR">
+            <AppenderRef ref="console"/>
+        </Root>
+        <!-- Addivity 로그내용 중복 제거 -->
+        <!-- Layout -->
+    </Loggers>
+</Configuration>

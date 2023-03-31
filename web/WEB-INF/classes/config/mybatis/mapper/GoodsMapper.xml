@@ -10,12 +10,14 @@
     </resultMap>
     <select id="selectOne" resultType="goodsDTO" parameterType="int">
         SELECT
-            goods.id, goods.brand_id,
+            goods.id, goods.brand_id as brandId,
+            goods.user_id as userId,
             detail, price, amount,
             brand.name as brandName,
             goods.name as name,
             user.nickname as sellerName,
-            image
+            image,detailImg,
+            number, url
         FROM goods
         INNER JOIN user
         ON goods.user_id = user.id
@@ -31,7 +33,7 @@
             brand.name as brandName,
             goods.name as name,
             user.nickname as sellerName,
-            image
+            image,detailImg
         FROM goods
         INNER JOIN user
         ON goods.user_id = user.id
@@ -48,7 +50,7 @@
             goods.name as name,
             user.nickname as sellerName,
             image,
-            category.kind as kind
+            category.kind as kind,detailImg
         FROM goods
         INNER JOIN user
         ON goods.user_id = user.id
@@ -66,7 +68,7 @@
             brand.name as brandName,
             goods.name as name,
             user.nickname as sellerName,
-            image
+            image,detailImg
         FROM goods
         INNER JOIN user
         ON goods.user_id = user.id
@@ -83,8 +85,8 @@
         WHERE brand_id = #{brand_id};
     </select>
     <insert id="insert" parameterType="goodsDTO" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO goods(name,user_id, brand_id, detail, price, amount, category_id, image)
-        VALUES(#{name},#{userId}, #{brandId}, #{detail}, #{price}, #{amount}, #{categoryId}, #{image})
+        INSERT INTO goods(name,user_id, brand_id, detail, price, amount, category_id, image,detailImg)
+        VALUES(#{name},#{userId}, #{brandId}, #{detail}, #{price}, #{amount}, #{categoryId}, #{image},#{detailImg})
     </insert>
     <update id="update" parameterType="goodsDTO">
         UPDATE goods
@@ -95,7 +97,13 @@
         detail = #{detail},
         price = #{price},
         amount = #{amount},
-        image = #{image}
+        image = #{image},
+        detailImg = #{detailImg}
+    </update>
+    <update id="updateCnt" parameterType="hashmap">
+        UPDATE goods
+        SET amount = #{amount}
+        WHERE goods.id = #{id}
     </update>
     <delete id="delete" parameterType="int">
         DELETE FROM goods

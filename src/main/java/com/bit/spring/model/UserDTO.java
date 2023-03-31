@@ -13,4 +13,11 @@ public class UserDTO {
     private String address;
     private String phone;
     private String role;
+    private String detail;
+    private int price;
+    private int amount;
+    private String image;
+    private String goodsName;
+    private String detailImg;
+    private int goodsId;
 }

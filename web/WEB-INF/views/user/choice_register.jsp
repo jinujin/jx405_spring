@@ -5,6 +5,9 @@
     <link href="/resources/images/CC_mark.JPG" rel="shortcut icon" type="image/x-icon">
     <title>회원가입 - CC</title>
     <style>
+        body{
+            height: 70%!important;
+        }
         .link {
             position: relative;
             display: block;
@@ -81,6 +84,8 @@
         }
 
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp" %>
@@ -88,9 +93,8 @@
     <div class="row h-100 align-items-center">
         <div class="c_member_class">
             <c:if test="${not empty message}">
-<%--                ${message}--%>
                 <script>
-                    alert(${message});
+                    Swal.fire({title:"아이디 중복"});
                 </script>
             </c:if>
             <div class="box">

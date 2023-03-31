@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.UserMapper">
+    <resultMap id="user" type="userDTO">
+        <result property="detail" column="detail"/>
+        <result property="price" column="price"/>
+        <result property="amount" column="amount"/>
+        <result property="image" column="image"/>
+        <result property="goodsName" column="name"/>
+        <result property="detailImg" column="detailImg"/>
+
+
+    </resultMap>
     <select id="auth" parameterType="userDTO" resultType="userDTO">
         SELECT * FROM user
         WHERE username = #{username}
@@ -25,6 +35,10 @@
         UPDATE user SET
         password = #{password},
         nickname = #{nickname},
+        address = #{address},
+        postcode = #{postcode},
+        email = #{email},
+        phone = #{phone}
         WHERE id = #{id}
     </update>
     <delete id="delete" parameterType="int">
@@ -33,6 +47,14 @@
     </delete>
     <select id="selectAll" resultType="userDTO">
         SELECT * FROM user
+    </select>
+    <select id="selectSellGoods" resultMap="user">
+        SELECT *, goods.id as goodsId
+        FROM user
+        INNER JOIN goods
+        ON user.id = goods.user_id
+        WHERE user.id = #{id}
+        ORDER BY goods.id DESC
     </select>
 </mapper>
 

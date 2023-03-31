@@ -5,7 +5,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardService {
@@ -34,9 +36,16 @@ public class BoardService {
         session.insert(NAMESPACE + ".insert", boardDTO);
     }
 
-    public List<BoardDTO> selectByKeyword(String keyword) {
+    public List<BoardDTO> selectByKeywordAll(String keyword) {
+        return session.selectList(NAMESPACE + ".selectByKeywordAll", keyword);
+    }
 
-        return session.selectList("list", session.selectList(NAMESPACE + ".selectByKeyword"));
+    public List<Object> selectByKeyword(String keyword, int classify) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", keyword);
+        params.put("classify",classify);
+
+        return session.selectList(NAMESPACE+".selectByKeyword",params);
 
     }
 

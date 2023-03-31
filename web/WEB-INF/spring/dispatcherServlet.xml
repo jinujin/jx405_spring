@@ -2,17 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
     <mvc:annotation-driven/>
-<!--    웹페이지 위치 지정-->
+    <!--    웹페이지 위치 지정-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-<!--    DB 데이터 정보 다 나와있어서 안좋음-->
-<!--    <bean class="com.bit.spring.connector.MySqlConnector">-->
-<!--    </bean>-->
+    <!--    DB 데이터 정보 다 나와있어서 안좋음-->
+    <!--    <bean class="com.bit.spring.connector.MySqlConnector">-->
+    <!--    </bean>-->
     <context:component-scan base-package="com.bit.spring"/>
-<!--    * 하나는 resources 바로 하위폴더만 ** 두개는 하위폴더 모두 지정-->
+    <!--    * 하나는 resources 바로 하위폴더만 ** 두개는 하위폴더 모두 지정-->
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+        <!-- setting maximum upload size in KB -->
+        <property name="maxUploadSize" value="5000000"/>
+
+    </bean>
 </beans>

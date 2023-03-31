@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.BuyMapper">
+    <resultMap id="buy" type="buyDTO">
+        <result property="detail" column="detail"/>
+        <result property="price" column="price"/>
+        <result property="cnt" column="cnt"/>
+        <result property="image" column="image"/>
+        <result property="goodsName" column="name"/>
+        <result property="detailImg" column="detailImg"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <result property="entryDate" column="entry_date"/>
+
+    </resultMap>
+    <select id="selectAll" resultMap="buy" parameterType="int">
+        SELECT *, goods.price * buy.cnt as totalPrice
+        FROM buy
+        INNER JOIN user
+        ON buy.user_id = user.id
+        INNER JOIN goods
+        ON buy.goods_id = goods.id
+        WHERE
+        buy.user_id = #{id}
+        ORDER BY entry_date DESC
+    </select>
+    <insert id="insert" parameterType="buyDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO buy(goods_id, user_id, entry_date,cnt,deliveryAddr)
+        VALUES(#{goodsId},#{userId}, NOW(),#{cnt}, #{deliveryAddr})
+    </insert>
+</mapper>

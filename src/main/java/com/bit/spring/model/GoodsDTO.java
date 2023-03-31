@@ -16,4 +16,7 @@ public class GoodsDTO {
     private String kind;
     private String image;
     private String name;
+    private String detailImg;
+    private String number;
+    private String url;
 }

@@ -7,6 +7,11 @@
     <title>상품 - CC</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nunito:wght@700&display=swap');
+
+        .soldOut{
+            text-decoration: line-through;
+            background-color: #a5b1c2 !important;
+        }
         .goods_list {
             border-radius: 10px;
             background-color: #F7F7F7;
@@ -33,16 +38,20 @@
             object-fit: contain;
             margin-bottom: 2px;
         }
-        .brandName{
+
+        .brandName {
             font-size: 10px;
         }
-        span{
+
+        span {
             color: #999999;
         }
-        .itemName{
+
+        .itemName {
             font-weight: bolder;
             font-size: 18px;
         }
+
         .a {
             display: grid;
             justify-items: center;
@@ -58,51 +67,60 @@
     </style>
 </head>
 <body>
-
 <%@include file="/WEB-INF/views/header.jsp" %>
-
+<c:set value="<%=logIn%>" var="logIn"/>
 <div class="container">
     <div class="wrapper">
         <div class="row h-100 align-items-center">
             <main>
                 <c:choose>
-                    <c:when test="${list eq null}">
-                        <div class="row">
-                            <div class="col-6">
-                                <h3>아직 등록된 상품이 존재하지 않습니다.</h3>
+                <c:when test="${list.size()==0}">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3>❌ 해당 상품이 존재하지 않습니다. ❌</h3>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                <div class="a">
+                    <c:forEach var="item" items="${list}">
+                    <c:choose>
+                    <c:when test="${item.amount == 0}">
+                    <div class="goods_list shadow soldOut">
+                        </c:when>
+                        <c:otherwise>
+                        <div class="goods_list shadow">
+                            </c:otherwise>
+                            </c:choose>
+                            <a href="/products/goodsOne/${item.id}" class="film_one justify-content-center">
+                                <img src="/resources/images/${item.image}">
+                            </a>
+                            <div class="goods_text itemName">
+                                    ${item.name}
+                            </div>
+                            <div class="goods_text">
+                                    ${item.price}원
+                            </div>
+                            <div class="goods_text brandName">
+                                <a href="/brand/brandOne/${item.brandId}">${item.brandName}</a> /
+                                <span>남은 갯수 : ${item.amount}개</span>
+                                <c:choose>
+                                    <c:when test="${item.amount <10 and item.amount != 0}">
+                                        <span class="text-danger">!품절 임박!</span>
+                                    </c:when>
+                                    <c:when test="${item.amount == 0}">
+                                        <span class="text-danger">❗품절❗</span>
+                                    </c:when>
+                                </c:choose>
                             </div>
                         </div>
-                    </c:when>
-
-                    <c:otherwise>
-                        <div class="a">
-                            <c:forEach var="item" items="${list}">
-                                <div class="goods_list shadow">
-                                        <a href="/products/goodsOne/${item.id}" class="film_one justify-content-center">
-                                            <img src="/resources/images/${item.image}">
-                                        </a>
-                                        <div class="goods_text itemName">
-                                                ${item.name}
-                                        </div>
-                                         <div class="goods_text">
-                                             ${item.price}원
-                                        </div>
-                                        <div class="goods_text brandName">
-                                            <a href="/brand/brandOne/${item.brandId}">${item.brandName}</a> / <span>남은 갯수 : ${item.amount}개</span>
-                                            <c:if test="${item.amount <10}">
-                                                <span class="text-danger">!품절 임박!</span>
-                                            </c:if>
-                                        </div>
-                                    </div>
-                            </c:forEach>
-                        </div>
+                        </c:forEach>
+                    </div>
                     </c:otherwise>
-                </c:choose>
+                    </c:choose>
             </main>
         </div>
     </div>
 </div>
-
 </body>
-
 </html>

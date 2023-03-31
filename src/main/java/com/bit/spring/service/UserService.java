@@ -62,6 +62,10 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
+    public List<Object> selectSellGoods(int id) {
+        return session.selectList(NAMESPACE + ".selectSellGoods",id);
+    }
+
     public List<UserDTO> selectAll() {
         return session.selectList(NAMESPACE + ".selectAll");
     }

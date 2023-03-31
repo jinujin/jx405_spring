@@ -20,6 +20,10 @@
         <!--      isAuthenticated() : 그 외에는 로그인하고 접근 가능하게  -->
         <!--        순서 중요-->
         <security:intercept-url pattern="/user/logOut" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/user/mypage/*" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/user/realMypage/*" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/products/add/*" access="isAuthenticated()"/>
+
         <!--        <security:intercept-url pattern="/**" access="isAuthenticated()"/>-->
         <security:form-login
                 username-parameter="username"

@@ -8,11 +8,13 @@
         <typeAlias type="com.bit.spring.model.BoardDTO" alias="boardDTO"/>
         <typeAlias type="com.bit.spring.model.GoodsDTO" alias="goodsDTO"/>
         <typeAlias type="com.bit.spring.model.BrandDTO" alias="brandDTO"/>
+        <typeAlias type="com.bit.spring.model.BuyDTO" alias="buyDTO"/>
     </typeAliases>
     <mappers>
         <mapper resource="config/mybatis/mapper/UserMapper.xml"/>
         <mapper resource="config/mybatis/mapper/BoardMapper.xml"/>
         <mapper resource="config/mybatis/mapper/GoodsMapper.xml"/>
         <mapper resource="config/mybatis/mapper/BrandMapper.xml"/>
+        <mapper resource="config/mybatis/mapper/BuyMapper.xml"/>
     </mappers>
 </configuration>

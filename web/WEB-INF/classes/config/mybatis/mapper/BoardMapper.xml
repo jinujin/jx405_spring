@@ -12,7 +12,7 @@
         SELECT * FROM board
         INNER JOIN user
         ON board.writer_id = user.id
-        WHERE classify = 1 OR classify = 2
+        WHERE NOT classify = 3
         ORDER BY board.id DESC
         <!-- ${} : 타입 변환 없이 넘어옴 / #{} : String으로 타입 변환하여 넘어옴-->
     </select>
@@ -27,7 +27,7 @@
     <select id="selectOne" resultMap="board" parameterType="int">
         SELECT * FROM board
         INNER JOIN user
-        ON board.writerId = user.id
+        ON board.writer_id = user.id
         WHERE board.id = #{id}
     </select>
     <insert id="insert" parameterType="boardDTO" useGeneratedKeys="true" keyProperty="id">
@@ -45,13 +45,24 @@
         DELETE FROM board
         WHERE id=#{id}
     </delete>
-    <select id="selectByKeyword" parameterType="string" resultMap="board">
+    <select id="selectByKeywordAll" parameterType="string" resultMap="board">
         SELECT * FROM board
         INNER JOIN user
-        ON board.writerId = user.id
-        WHERE title LIKE concat('%', #{keyword},'%')
+        ON board.writer_id = user.id
+        WHERE NOT classify = 3 AND
+        (title LIKE concat('%', #{keyword},'%')
         OR
-        content LIKE concat('%', #{keyword},'%')
+        content LIKE concat('%', #{keyword},'%'))
+        ORDER BY board.id DESC
+    </select>
+    <select id="selectByKeyword" parameterType="map" resultMap="board">
+        SELECT * FROM board
+        INNER JOIN user
+        ON board.writer_id = user.id
+        WHERE classify = #{classify} AND
+        (title LIKE concat('%', #{keyword},'%')
+        OR
+        content LIKE concat('%', #{keyword},'%'))
         ORDER BY board.id DESC
     </select>
     <select id="countSearchResult" parameterType="string" resultType="int">

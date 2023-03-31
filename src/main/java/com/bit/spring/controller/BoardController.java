@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/board/")
@@ -31,6 +36,7 @@ public class BoardController {
     public String showA(){
         return "/board/a";
     }
+
     @GetMapping("showAll")
     public String showAll(Authentication authentication, Model model) {
 //        System.out.println(authentication.getName());
@@ -46,6 +52,33 @@ public class BoardController {
         model.addAttribute("list",boardService.selectAllByKind(classify));
 
         return "/board/showAllByKind";
+    }
+    @GetMapping("showAllQnA")
+    public String showAllQnA(Model model) {
+        model.addAttribute("list",boardService.selectAllByKind(3));
+
+        return "/board/showAllQnA";
+    }
+
+    @GetMapping("search/{classify}")
+    public String showAllByKeyword(Model model, String keyword, @PathVariable int classify) {
+        List<Object> list = boardService.selectByKeyword(keyword,classify);
+
+        model.addAttribute("list", list);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("classify", classify);
+
+        return "/board/showAll";
+    }
+
+
+    @GetMapping("search")
+    public String showAllByKeyWordAll(Model model, String keyword) {
+        List<BoardDTO> list = boardService.selectByKeywordAll(keyword);
+
+        model.addAttribute("list", list);
+
+        return "/board/showAll";
     }
 
     @GetMapping("showOne/{id}")

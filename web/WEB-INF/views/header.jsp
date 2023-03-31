@@ -1,7 +1,9 @@
+<%@ page import="com.bit.spring.model.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-    boolean loginCheck = session.getAttribute("logIn") == null;
+    UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+    boolean loginCheck = logIn == null;
 %>
 <html>
 <head>
@@ -113,9 +115,9 @@
             </li>
             <li><a href="/brand/brandList" class="nav-link px-2 text-white notHome">브랜드</a></li>
             <li><a href="/board/showAll" class="nav-link px-2 text-white notHome">FAQs</a></li>
-            <c:if test="<%=!loginCheck%>">
-                <li><a href="/user/login" class="nav-link px-2 text-white notHome">장바구니</a></li>
-            </c:if>
+<%--            <c:if test="<%=!loginCheck%>">--%>
+<%--                <li><a href="/user/login" class="nav-link px-2 text-white notHome">장바구니</a></li>--%>
+<%--            </c:if>--%>
         </ul>
             <form class="col-lg-auto mb-lg-0 me-lg-3 form" action="/products/search" method="get" role="search">
                 <div class="searchbox"><input type="search" class="form-control form-control-dark" placeholder="상품검색"
@@ -135,7 +137,7 @@
                 </c:when>
                 <c:otherwise>
                     <button type="button" class="btn btn-outline-light me-2"
-                            onclick="location.href='/user/login'">내정보
+                            onclick="location.href='/user/realMypage/<%=logIn.getId()%>'">내정보
                     </button>
                     <button type="button" class="btn btn-warning" onclick="location.href='/user/logout'">로그아웃
                     </button>
