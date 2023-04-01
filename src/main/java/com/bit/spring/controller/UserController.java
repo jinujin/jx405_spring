@@ -56,21 +56,30 @@ public class UserController {
 
     @GetMapping("mypage/{id}")
     public String showMypage(HttpSession session, Model model, @PathVariable int id) {
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
         UserDTO u = userService.selectOne(id);
-        model.addAttribute("userDTO", u);
 
+        if (logIn.getId() != u.getId()) {
+            return "redirect:/";
+        }
+        model.addAttribute("userDTO", u);
 
         return "/user/mypage";
     }
 
     @GetMapping("realMypage/{id}")
     public String showRealMypage(HttpSession session, Model model, @PathVariable int id) {
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+
         UserDTO u = userService.selectOne(id);
         List<Object> list = userService.selectSellGoods(id);
         List<UserDTO> userList = userService.selectAll();
         List<BuyDTO> buyList = buyService.selectAll(id);
         List<GoodsDTO> goodsList = goodsService.selectAll();
 
+        if (logIn.getId() != u.getId()) {
+            return "redirect:/";
+        }
         if (u.getRole().equals("ROLE_SELLER")) {
             model.addAttribute("list", list);
             model.addAttribute("goodsList", goodsList);

@@ -258,7 +258,7 @@
                     <th class="text-center info-th">닉네임</th>
                     <td class="info">
                         <form action="/user/updateNick/${userDTO.id}" method="post">
-                            <input type="text" name="nickname" value="${userDTO.nickname}">
+                            <input type="text" name="nickname" maxlength="10" value="${userDTO.nickname}">
                             <button type="submit" class="badge text-bg-secondary">닉네임 변경</button>
                         </form>
                     </td>

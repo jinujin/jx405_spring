@@ -76,8 +76,8 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="input-name">BRAND NAME</label>
-                            <input type="text" name="nickname" class="form-control mb-2" id="input-name"/>
+                            <label for="input-name">NAME</label>
+                            <input type="text" name="nickname" maxlength="10" class="form-control mb-2" id="input-name"/>
                         </div>
                     </div>
                     <div class="row">

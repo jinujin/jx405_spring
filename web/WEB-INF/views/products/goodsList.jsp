@@ -77,7 +77,7 @@
                 <c:when test="${list.size()==0}">
                     <div class="row">
                         <div class="col-6">
-                            <h3>❌ 해당 상품이 존재하지 않습니다. ❌</h3>
+                            <h3>❌ 상품이 존재하지 않습니다. ❌</h3>
                         </div>
                     </div>
                 </c:when>

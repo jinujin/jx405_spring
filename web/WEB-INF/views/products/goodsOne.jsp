@@ -115,6 +115,11 @@
 <c:set value="<%=logIn%>" var="logIn"/>
 <div class="container">
     <main>
+        <c:if test="${logIn.role.equals('ROLE_SELLER') && goodsDTO.userId eq logIn.id}">
+            <button type="button" class="btn btn-danger" id="deleteGoods"
+                    onclick=deleteCheck()>상품 삭제
+            </button>
+        </c:if>
         <c:choose>
         <c:when test="${goodsDTO.amount == 0}">
         <div class="col showOne">
@@ -175,8 +180,8 @@
                                                 </button>
                                             </c:when>
                                             <c:otherwise>
-                                                <form id="target" method="post">
-                                                    <button type="submit" class="btn btn-lg btn-primary col-3"
+                                                <form id="target">
+                                                    <button type="button" class="btn btn-lg btn-primary col-3"
                                                             onclick="payAddr()">구매하기
                                                     </button>
                                                 </form>
@@ -235,8 +240,49 @@
                 })
 
                 let payAddr = () => {
-                    let address = "/buy/pay/${goodsDTO.id}&${logIn.id}&${logIn.address}&"+cntInt;
-                    $('#target').attr('action', address);
+                    Swal.fire({
+                        title: '정말 구매하시겠습니까?',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: "아니요",
+                        confirmButtonText: "구매하기"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let target = document.getElementById("target");
+                            let address = "/buy/pay/${goodsDTO.id}&${logIn.id}&${logIn.address}&" + cntInt;
+                            $('#target').attr('action', address);
+                            $('#target').attr('method', "post");
+                            Swal.fire({
+                                title: '구매 성공',
+                                icon: 'success'
+                            }).then(() => {
+                                target.submit()
+                            })
+                        }
+                    })
+                }
+                let deleteCheck = () => {
+                    let deleteGoods = document.getElementById("deleteGoods");
+                    let addr = "location.href='/products/delete/${goodsDTO.id}&${goodsDTO.userId}'";
+                    $('#deleteGoods').attr('onclick', addr);
+                    Swal.fire({
+                        title: '정말 삭제하시겠습니까?',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: "취소",
+                        confirmButtonText: "삭제"
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+                            Swal.fire({
+                                title: '삭제 성공',
+                                icon : 'success'
+                            }).then(()=>{
+                                deleteGoods.click();
+                            })
+                        }
+                    })
                 }
             </script>
     </main>

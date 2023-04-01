@@ -7,6 +7,7 @@ import com.bit.spring.service.BrandService;
 import com.bit.spring.service.GoodsService;
 import com.bit.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,18 @@ public class GoodsController {
     public String showGoodsList(Model model) {
         model.addAttribute("list", goodsService.selectAll());
         return "products/goodsList";
+    }
+
+    @GetMapping("delete/{id}&{userId}")
+    public String processDelete(HttpSession session, @PathVariable int id, @PathVariable int userId) throws IOException {
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+        UserDTO u = userService.selectOne(userId);
+
+        if (logIn.getId() != u.getId()) {
+            return "redirect:/";
+        }
+        goodsService.delete(id);
+        return "redirect:/user/realMypage/"+logIn.getId();
     }
 
     @GetMapping("goodsListByKind/{categoryId}")
@@ -99,7 +112,6 @@ public class GoodsController {
         String filename = uuid + "_" + file.getOriginalFilename();
 
         File saveFile = new File(httpServletRequest.getServletContext().getRealPath(folderPath) + filename);
-        System.out.println(saveFile);
 
         /* 실제 폴더에 파일 업로드 */
         try {
@@ -114,9 +126,6 @@ public class GoodsController {
     @ResponseBody
     @PostMapping("add")
     public void processUpsert(HttpServletResponse response, HttpSession session, HttpServletRequest httpServletRequest, @RequestParam("name") String name, @RequestParam("image") MultipartFile image, @RequestParam("detailImg") MultipartFile detailImg, @RequestParam("brandId") int brandId, @RequestParam("price") int price, @RequestParam("amount") int amount, @RequestParam("detail") String detail , @RequestParam("userId") int userId, @RequestParam("categoryId") int categoryId) throws IOException {
-        System.out.println(detailImg);
-        System.out.println(image);
-        System.out.println(image.getOriginalFilename());
 
         GoodsDTO g = new GoodsDTO();
 
@@ -135,13 +144,10 @@ public class GoodsController {
             g.setDetailImg(detailFileName);
             g.setCategoryId(categoryId);
 
-            System.out.println(g);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("file upload fail");
             response.sendRedirect("products/add");
         }
-        System.out.println("pass try-catch");
 //        goodsDTO.setUserId(logIn.getId());
         goodsService.insert(g);
         response.sendRedirect("/user/realMypage/" + logIn.getId());
