@@ -116,8 +116,11 @@
 <div class="container">
     <main>
         <c:if test="${logIn.role.equals('ROLE_SELLER') && goodsDTO.userId eq logIn.id}">
-            <button type="button" class="btn btn-danger" id="deleteGoods"
+            <button type="button" class="btn btn-danger" id="deleteGoods" style="margin-right: 10px"
                     onclick=deleteCheck()>상품 삭제
+            </button>
+            <button type="button" class="btn btn-success" id="updateGoods"
+                    onclick="location.href='/products/updateGoods/${goodsDTO.id}'">상품 수정
             </button>
         </c:if>
         <c:choose>
@@ -273,12 +276,12 @@
                         cancelButtonColor: '#d33',
                         cancelButtonText: "취소",
                         confirmButtonText: "삭제"
-                    }).then((result)=>{
-                        if(result.isConfirmed){
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                             Swal.fire({
                                 title: '삭제 성공',
-                                icon : 'success'
-                            }).then(()=>{
+                                icon: 'success'
+                            }).then(() => {
                                 deleteGoods.click();
                             })
                         }

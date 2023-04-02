@@ -37,7 +37,8 @@
         }
 
         .register {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            color: #ff8888;
         }
     </style>
 </head>
@@ -58,47 +59,44 @@
                         <h4>상품 이름</h4>
                         <li class="list-group">
                             <input type="text" class="form-control register" id="name" name="name"
-                                   placeholder="상품 이름">
+                                   placeholder="상품 이름" aria-describedby="goodsName" required>
                         </li>
                         <h4>상품 가격</h4>
                         <li class="list-group">
                             <input type="number" class="form-control register" id="price" name="price"
-                                   placeholder="상품 가격">
+                                   placeholder="상품 가격" required>
                         </li>
                         <h4>상품 수량</h4>
                         <li class="list-group">
                             <input type="number" class="form-control register" id="amount" name="amount"
-                                   placeholder="상품 수량">
+                                   placeholder="상품 수량" required>
                         </li>
                         <h4>상품사진</h4>
                         <li class="list-group">
-                            <%--              <input type="file" class="form-control register" id="goodsImg" name="goodsImg">--%>
-                            <%--              <form method="post" action="/products/add" enctype="multipart/form-data">--%>
-                            <input type="file" class="form-control-file" name="image" id="image"/>
-                            <%--              </form>--%>
+                            <input type="file" class="form-control mb-2" name="image" id="image"/>
                         </li>
 
                         <h4>상품 카테고리</h4>
-                        <select class="form-select is-invalid form-control" id="category" name="categoryId">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
+                        <select class="form-select" id="category" name="categoryId" required>
+                            <option>1 의류</option>
+                            <option>2 식품</option>
+                            <option>3 생활용품</option>
                         </select>
-                        <div class="invalid-feedback register">
-                            카테고리는 선택해주세요.
+                        <div class="register">
+                            ※ 카테고리를 선택해주세요.
                         </div>
                         <h4>상품 정보관련 사진</h4>
                         <li class="list-group">
                             <input type="file" class="form-control register" id="detailImg" name="detailImg">
                         </li>
                         <h4>브랜드 선택</h4>
-                        <select class="form-select is-invalid form-control" id="brand" name="brandId">
+                        <select class="form-select" id="brand" name="brandId" required>
                             <c:forEach var="item" items="${brandList}">
-                                <option>${item.id}</option>
+                                <option>${item.id} ${item.name}</option>
                             </c:forEach>
                         </select>
-                        <div class="invalid-feedback register">
-                            카테고리는 선택해주세요.
+                        <div class="register">
+                            ※ 브랜드를 선택해주세요.
                         </div>
                         <h4>상품 정보</h4>
                         <li class="list-group">

@@ -8,10 +8,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nunito:wght@700&display=swap');
 
-        .soldOut{
+        .soldOut {
             text-decoration: line-through;
             background-color: #a5b1c2 !important;
         }
+
         .goods_list {
             border-radius: 10px;
             background-color: #F7F7F7;
@@ -93,7 +94,7 @@
                             </c:otherwise>
                             </c:choose>
                             <a href="/products/goodsOne/${item.id}" class="film_one justify-content-center">
-                                <img src="/resources/images/${item.image}">
+                                <img class="goods-img" src="/resources/images/${item.image}">
                             </a>
                             <div class="goods_text itemName">
                                     ${item.name}

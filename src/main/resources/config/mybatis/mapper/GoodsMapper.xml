@@ -99,6 +99,7 @@
         amount = #{amount},
         image = #{image},
         detailImg = #{detailImg}
+        WHERE id = #{id}
     </update>
     <update id="updateCnt" parameterType="hashmap">
         UPDATE goods

@@ -7,7 +7,6 @@ import com.bit.spring.service.BrandService;
 import com.bit.spring.service.GoodsService;
 import com.bit.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +50,7 @@ public class GoodsController {
             return "redirect:/";
         }
         goodsService.delete(id);
-        return "redirect:/user/realMypage/"+logIn.getId();
+        return "redirect:/user/realMypage/" + logIn.getId();
     }
 
     @GetMapping("goodsListByKind/{categoryId}")
@@ -82,14 +81,30 @@ public class GoodsController {
         return "products/goodsOne";
     }
 
-    @GetMapping("update/{id}")
+    @GetMapping("updateGoods/{id}")
     public String showUpdate(HttpSession session, Model model, @PathVariable int id) {
+        if (session.getAttribute("logIn") == null) {
+            return "redirect:/user/login";
+        }
+        GoodsDTO g = goodsService.selectOne(id);
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
 
-        return "products/update";
+        if (g == null || g.getUserId() != logIn.getId()) {
+            return "redirect:/products/goodsList";
+        }
+        List<BrandDTO> brandList = brandService.selectAll();
+
+        model.addAttribute("brandList", brandList);
+        model.addAttribute("goodsDTO", g);
+
+        return "products/updateGoods";
     }
 
     @GetMapping("add")
     public String showAdd(HttpSession session, Model model) {
+        if (session.getAttribute("logIn") == null) {
+            return "redirect:/user/login";
+        }
         List<BrandDTO> brandList = brandService.selectAll();
 
         model.addAttribute("brandList", brandList);
@@ -125,24 +140,30 @@ public class GoodsController {
 
     @ResponseBody
     @PostMapping("add")
-    public void processUpsert(HttpServletResponse response, HttpSession session, HttpServletRequest httpServletRequest, @RequestParam("name") String name, @RequestParam("image") MultipartFile image, @RequestParam("detailImg") MultipartFile detailImg, @RequestParam("brandId") int brandId, @RequestParam("price") int price, @RequestParam("amount") int amount, @RequestParam("detail") String detail , @RequestParam("userId") int userId, @RequestParam("categoryId") int categoryId) throws IOException {
+    public void processUpsert(HttpServletResponse response, HttpSession session, HttpServletRequest httpServletRequest, @RequestParam("name") String name, @RequestParam("image") MultipartFile image, @RequestParam("detailImg") MultipartFile detailImg, @RequestParam("brandId") String brandId, @RequestParam("price") int price, @RequestParam("amount") int amount, @RequestParam("detail") String detail, @RequestParam("userId") int userId, @RequestParam("categoryId") String categoryId) throws IOException {
 
         GoodsDTO g = new GoodsDTO();
-
         UserDTO logIn = (UserDTO) session.getAttribute("logIn");
         try {
-            String fileName = fileUpload(image, httpServletRequest);
-            String detailFileName = fileUpload(detailImg, httpServletRequest);
-
+            String fileName = "ready.jpg";
+            String detailFileName = null;
+            if (!image.getOriginalFilename().equals("")) {
+                fileName = fileUpload(image, httpServletRequest);
+            }
+            if (!detailImg.getOriginalFilename().equals("")) {
+                detailFileName = fileUpload(detailImg, httpServletRequest);
+            }
+            String brandIdd = brandId.replaceAll("[^\\d]", "");
+            String categoryIdd = categoryId.replaceAll("[^\\d]", "");
             g.setImage(fileName);
             g.setName(name);
             g.setPrice(price);
             g.setDetail(detail);
             g.setAmount(amount);
-            g.setBrandId(brandId);
+            g.setBrandId(Integer.parseInt(brandIdd));
             g.setUserId(userId);
             g.setDetailImg(detailFileName);
-            g.setCategoryId(categoryId);
+            g.setCategoryId(Integer.parseInt(categoryIdd));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,6 +172,42 @@ public class GoodsController {
 //        goodsDTO.setUserId(logIn.getId());
         goodsService.insert(g);
         response.sendRedirect("/user/realMypage/" + logIn.getId());
+    }
+
+    @ResponseBody
+    @PostMapping("updateGoods/{id}")
+    public void processUpdate(Model model, @PathVariable int id, HttpServletResponse response, HttpSession session, HttpServletRequest httpServletRequest, @RequestParam("name") String name, @RequestParam("image") MultipartFile image, @RequestParam("detailImg") MultipartFile detailImg, @RequestParam("brandId") String brandId, @RequestParam("price") int price, @RequestParam("amount") int amount, @RequestParam("detail") String detail, @RequestParam("categoryId") String categoryId) throws IOException {
+
+        GoodsDTO g = goodsService.selectOne(id);
+        model.addAttribute("goodsDTO", g);
+        UserDTO logIn = (UserDTO) session.getAttribute("logIn");
+        try {
+            String fileName = "ready.jpg";
+            String detailFileName = null;
+            if (!image.getOriginalFilename().equals("")) {
+                fileName = fileUpload(image, httpServletRequest);
+            }
+            if (!detailImg.getOriginalFilename().equals("")) {
+                detailFileName = fileUpload(detailImg, httpServletRequest);
+            }
+            String brandIdd = brandId.replaceAll("[^\\d]", "");
+            String categoryIdd = categoryId.replaceAll("[^\\d]", "");
+            g.setImage(fileName);
+            g.setName(name);
+            g.setPrice(price);
+            g.setDetail(detail);
+            g.setAmount(amount);
+            g.setBrandId(Integer.parseInt(brandIdd));
+            g.setDetailImg(detailFileName);
+            g.setCategoryId(Integer.parseInt(categoryIdd));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("/user/realMypage/" + logIn.getId());
+        }
+//        goodsDTO.setUserId(logIn.getId());
+        goodsService.update(g);
+        response.sendRedirect("/products/goodsOne/" + id);
     }
 
 }

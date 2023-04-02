@@ -18,7 +18,6 @@
         FROM brand
         INNER JOIN user
         ON brand.user_id = user.id
-        ORDER BY brand.id DESC
     </select>
     <insert id="insert" parameterType="brandDTO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO brand(name,user_id, url, number, info)
